@@ -112,6 +112,8 @@ function load_page(id) {
   document.querySelector("#compose-view").style.display = "none";
   document.querySelector("#content-view").style.display = "block";
 
+  document.querySelector("#content-view").innerHTML = "";
+
   fetch(`/emails/${id}`)
     .then((response) => response.json())
     .then((email) => {
@@ -119,7 +121,18 @@ function load_page(id) {
       console.log(email);
 
       const element = document.createElement("div");
-      element.innerHTML = `${email.id}`;
+      element.innerHTML = `<ul class="content">
+        <li class="content-header"><p><strong>From:</strong> ${email.sender}</p></li>
+        <li class="content-header"><p><strong>To:</strong> ${email.recipients}</p></li>
+        <li class="content-header"><p><strong>Subject:</strong> ${email.subject}</p></li>
+        <li class="content-header"><p><strong>Timestamp:</strong> ${email.timestamp}</p></li>
+        <ul class="content-button">
+          <li>Reply</li>
+          <li>Archive</li>
+        </ul>
+      </ul>
+      <hr>
+      <p>${email.body}</p>`
 
       document.querySelector("#content-view").append(element);
       // ... do something else with email ...
