@@ -10,11 +10,13 @@ textarea {
     padding: 5px;
     margin: 1px auto 1px;
     border: 1px solid black;
+    width: 100%;
 }
 
 .email-left
 {
     width: 28%;
+    text-align: center;
 }
 
 .email-left ul
@@ -32,3 +34,32 @@ textarea {
 {
     margin: 0 auto;
 }
+
+.email-right p 
+{
+    margin: 0 auto;
+}
+
+.content
+{
+    padding: 0;
+    list-style-type: none;
+    margin: 0 auto;
+}
+
+.content-header p
+{
+    margin: 0;
+}
+
+.content-button
+{
+    padding: 0;
+    list-style-type: none;
+    margin: 0 auto;
+}
+
+
+
+
+
