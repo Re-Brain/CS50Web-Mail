@@ -14,14 +14,12 @@ document.addEventListener("DOMContentLoaded", function () {
     .querySelector("#compose-form")
     .addEventListener("submit", send_email);
 
-  document
-    .querySelectorAll(".email")
-    .addEventListener("click", () =>
-      load_page(document.querySelectorAll(".email").querySelector("#id").value)
-    );
-
   // By default, load the inbox
   load_mailbox("inbox");
+
+  document.querySelectorAll(".email").addEventListener("click", function () {
+    load_page(document.querySelectorAll(".email").querySelector("#id").value);
+  });
 });
 
 function compose_email() {
@@ -58,7 +56,7 @@ function load_mailbox(mailbox) {
       for (const message of emails) {
         const element = document.createElement("div");
         element.className = "email";
-        element.addEventListener("click", () => load_page(message.id))
+        element.addEventListener("click", () => load_page(message.id));
         element.innerHTML = `<input type="hidden" id="id" value="${message.id}">`;
 
         const leftDiv = document.createElement("div");
@@ -133,15 +131,48 @@ function load_page(id) {
         <li class="content-header"><p><strong>To:</strong> ${email.recipients}</p></li>
         <li class="content-header"><p><strong>Subject:</strong> ${email.subject}</p></li>
         <li class="content-header"><p><strong>Timestamp:</strong> ${email.timestamp}</p></li>
-        <ul class="content-button">
-          <li>Reply</li>
-          <li>Archive</li>
-        </ul>
-      </ul>
-      <hr>
-      <p>${email.body}</p>`;
+      </ul>`;
+
+      const buttonContainer = document.createElement("div");
+      const archive = document.createElement("button");
+      archive.addEventListener("click", () => archiveStatus(id));
+      archive.innerHTML =  (email.archived) ? archive.innerHTML = "Unarchive" : archive.innerHTML = "Archive";
+      buttonContainer.appendChild(archive);
+
+      const hr = document.createElement("hr");
+      const body = document.createElement("p");
+      body.innerHTML = `${email.body}`;
+
+      element.append(buttonContainer);
+      element.append(hr);
+      element.append(body);
 
       document.querySelector("#content-view").append(element);
-      // ... do something else with email ...
     });
+}
+
+function archiveStatus(id) {
+  fetch(`/emails/${id}`)
+    .then((response) => response.json())
+    .then((email) => {
+      console.log(email.archived);
+      if (email.archived) {
+        fetch(`/emails/${id}`, {
+          method: "PUT",
+          body: JSON.stringify({
+            archived: false,
+          }),
+        });
+        load_mailbox("inbox");
+      } else {
+        fetch(`/emails/${id}`, {
+          method: "PUT",
+          body: JSON.stringify({
+            archived: true,
+          }),
+        });
+        load_mailbox("inbox");
+      }
+    });
+
 }
