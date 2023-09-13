@@ -14,6 +14,12 @@ document.addEventListener("DOMContentLoaded", function () {
     .querySelector("#compose-form")
     .addEventListener("submit", send_email);
 
+  document
+    .querySelectorAll(".email")
+    .addEventListener("click", () =>
+      load_page(document.querySelectorAll(".email").querySelector("#id").value)
+    );
+
   // By default, load the inbox
   load_mailbox("inbox");
 });
@@ -22,6 +28,7 @@ function compose_email() {
   // Show compose view and hide other views
   document.querySelector("#emails-view").style.display = "none";
   document.querySelector("#compose-view").style.display = "block";
+  document.querySelector("#content-view").style.display = "none";
 
   // Clear out composition fields
   document.querySelector("#compose-recipients").value = "";
@@ -33,6 +40,7 @@ function load_mailbox(mailbox) {
   // Show the mailbox and hide other views
   document.querySelector("#emails-view").style.display = "block";
   document.querySelector("#compose-view").style.display = "none";
+  document.querySelector("#content-view").style.display = "none";
 
   // Show the mailbox name
   document.querySelector("#emails-view").innerHTML = `<h3>${
@@ -50,6 +58,8 @@ function load_mailbox(mailbox) {
       for (const message of emails) {
         const element = document.createElement("div");
         element.className = "email";
+        element.onclick = function() { load_page(message.id) };
+        element.innerHTML = `<input type="hidden" id="id" value="${message.id}">`;
 
         const leftDiv = document.createElement("div");
         leftDiv.className = "email-left";
@@ -59,8 +69,8 @@ function load_mailbox(mailbox) {
         </ul>`;
 
         const rightDiv = document.createElement("div");
-        rightDiv.className = "email-right"
-        rightDiv.innerHTML = `${message.timestamp}`;
+        rightDiv.className = "email-right";
+        rightDiv.innerHTML = `<p>${message.timestamp}</p>`;
 
         element.appendChild(leftDiv);
         element.appendChild(rightDiv);
@@ -93,4 +103,25 @@ function send_email(event) {
   document.querySelector("#compose-recipients").value = "";
   document.querySelector("#compose-subject").value = "";
   document.querySelector("#compose-body").value = "";
+}
+
+function load_page(id) {
+  // Create another div in inbox.html for reading the mail, use the style.display technique from load mailbox, and generate the html with
+  // js
+  document.querySelector("#emails-view").style.display = "none";
+  document.querySelector("#compose-view").style.display = "none";
+  document.querySelector("#content-view").style.display = "block";
+
+  fetch(`/emails/${id}`)
+    .then((response) => response.json())
+    .then((email) => {
+      // Print email
+      console.log(email);
+
+      const element = document.createElement("div");
+      element.innerHTML = `${email.id}`;
+
+      document.querySelector("#content-view").append(element);
+      // ... do something else with email ...
+    });
 }
