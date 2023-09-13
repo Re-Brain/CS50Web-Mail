@@ -134,10 +134,18 @@ function load_page(id) {
       </ul>`;
 
       const buttonContainer = document.createElement("div");
+
       const archive = document.createElement("button");
       archive.addEventListener("click", () => archiveStatus(id));
-      archive.innerHTML =  (email.archived) ? archive.innerHTML = "Unarchive" : archive.innerHTML = "Archive";
+      archive.innerHTML = email.archived
+        ? (archive.innerHTML = "Unarchive")
+        : (archive.innerHTML = "Archive");
       buttonContainer.appendChild(archive);
+
+      const reply = document.createElement("button");
+      archive.addEventListener("click", () => replyEmail(email));
+      archive.innerHTML = "Reply";
+      buttonContainer.appendChild(reply);
 
       const hr = document.createElement("hr");
       const body = document.createElement("p");
@@ -174,5 +182,11 @@ function archiveStatus(id) {
         load_mailbox("inbox");
       }
     });
+}
 
+function replyEmail(email)
+{
+  document.querySelector("#emails-view").style.display = "none";
+  document.querySelector("#compose-view").style.display = "block";
+  document.querySelector("#content-view").style.display = "none";  
 }
