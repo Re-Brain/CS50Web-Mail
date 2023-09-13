@@ -58,7 +58,7 @@ function load_mailbox(mailbox) {
       for (const message of emails) {
         const element = document.createElement("div");
         element.className = "email";
-        element.onclick = function() { load_page(message.id) };
+        element.addEventListener("click", () => load_page(message.id))
         element.innerHTML = `<input type="hidden" id="id" value="${message.id}">`;
 
         const leftDiv = document.createElement("div");
@@ -114,6 +114,13 @@ function load_page(id) {
 
   document.querySelector("#content-view").innerHTML = "";
 
+  fetch(`/emails/${id}`, {
+    method: "PUT",
+    body: JSON.stringify({
+      read: true,
+    }),
+  });
+
   fetch(`/emails/${id}`)
     .then((response) => response.json())
     .then((email) => {
@@ -132,7 +139,7 @@ function load_page(id) {
         </ul>
       </ul>
       <hr>
-      <p>${email.body}</p>`
+      <p>${email.body}</p>`;
 
       document.querySelector("#content-view").append(element);
       // ... do something else with email ...
