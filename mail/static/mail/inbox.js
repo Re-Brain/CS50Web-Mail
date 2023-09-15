@@ -143,8 +143,8 @@ function load_page(id) {
       buttonContainer.appendChild(archive);
 
       const reply = document.createElement("button");
-      archive.addEventListener("click", () => replyEmail(email));
-      archive.innerHTML = "Reply";
+      reply.addEventListener("click", () => replyEmail(email));
+      reply.innerHTML = "Reply";
       buttonContainer.appendChild(reply);
 
       const hr = document.createElement("hr");
@@ -184,9 +184,17 @@ function archiveStatus(id) {
     });
 }
 
-function replyEmail(email)
-{
-  document.querySelector("#emails-view").style.display = "none";
-  document.querySelector("#compose-view").style.display = "block";
-  document.querySelector("#content-view").style.display = "none";  
+function replyEmail(email) {
+  compose_email();
+
+  document.querySelector("#compose-recipients").value = email.sender;
+  document.querySelector("#compose-subject").value = email.subject
+    .toString()
+    .includes("Re: ")
+    ? email.subject
+    : `Re: ${email.subject}`;
+
+  document.querySelector(
+    "#compose-body"
+  ).value = `${email.timestamp} ${email.sender} wrote: ${email.body}`;
 }
