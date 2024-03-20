@@ -17,9 +17,12 @@ document.addEventListener("DOMContentLoaded", function () {
   // By default, load the inbox
   load_mailbox("inbox");
 
-  document.querySelectorAll(".email").addEventListener("click", function () {
-    load_page(document.querySelectorAll(".email").querySelector("#id").value);
-  });
+  document.querySelectorAll(".email").forEach(function(element)
+  {
+    element.addEventListener("click", function () {
+      load_page(document.querySelectorAll(".email").querySelector("#id").value);
+    });
+  })
 });
 
 function compose_email() {
@@ -58,6 +61,15 @@ function load_mailbox(mailbox) {
         element.className = "email";
         element.addEventListener("click", () => load_page(message.id));
         element.innerHTML = `<input type="hidden" id="id" value="${message.id}">`;
+
+        if (message.read)
+        {
+          element.style.background = "#C5C6D0"
+        }
+        else
+        {
+          element.style.background = "white"
+        }
 
         const leftDiv = document.createElement("div");
         leftDiv.className = "email-left";

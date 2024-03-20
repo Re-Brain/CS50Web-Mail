@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=C:\Users\admin\Current\mail\env
+set VIRTUAL_ENV=C:\Users\admin\Work\Code\CS50_Web\Projects\mail\env
 
 if not defined PROMPT set PROMPT=$P$G
 

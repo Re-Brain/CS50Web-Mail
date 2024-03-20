@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="C:\Users\admin\Current\mail\env"
+VIRTUAL_ENV="C:\Users\admin\Work\Code\CS50_Web\Projects\mail\env"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
